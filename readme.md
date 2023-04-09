@@ -13,10 +13,24 @@ This is a first attempt at creating a multithreaded client-server application bu
 2. Run the server program via ```./server <Server Port Number>```.
 3. Run the client program in independent shell processes via ```./client <ClientIP> <Server Port Number>```.
 
+## Overview
+First, a server is started as a new process, and listens for incoming connections on a specified port and spawn a new thread for each accepted client. On intialisation, server and client create their own working directories. Each server thread prompts its client for a username, which is sent and stored in a global list of users in the server.
+
+
+Clients are started as independent processes with two threads : ```c_clientinputhandler``` and ```c_servereresponsehandler```. The former sends command line input (requests) to the associated server thread, while the latter processes server responses. 
+
+Raw string messages are wrapped in a ```packet``` header before being sent across the network. The header contains various control bits and the data payload. Note that the struct serialization is naive at present, but can be made more widely compatible later.
+
+
+On the server side, each ```s_clienthandler``` thread processes messages messages from its associated client. Each thread implements logic to perform a different function based on the client request. I am currently modifying the server thread architecture to increase complexity.
+
+Lastly, a downloadable server log file keeps track of all messages sent to the server along with timestamps and message details. 
+
+
 ## Functionality:
 The server has various functionalities. Multiple clients can connect to and interact with the server concurrently. 
 Some functions:
-1. ```LIST``` : (done) Returns a list of connected clients to the requesting client. (done)
+1. ```LIST``` : (done) Returns a list of connected clients to the requesting client.
 2. ```EXIT``` : (done) Safely disconnects the requesting client from the server.
 3. ```CHAT client1 client5 client3...``` : (in progress) Initiates a chat mode between requesting client and chat request client(s). A preliminary handshake is performed, inspired by the FTP protocol to confirm client availability. The goal is to implement multiple chat servers given a pool of clients connected to the server. Server maintains a log of all messages sent and received.
 4. ```UP filename```   : (in progress) Uploads a file (any size/ type) to the server. Currently designing the protocol for .jpg files.
@@ -36,8 +50,6 @@ The most significant change has been the implementation of a ```packet``` struct
 - Methods implemented for chat handshake, file download/upload authentication. Can be made more featureful by adding encryption.
 
 ### Threads setup:
-
-On intialisation, server and client create their own working directories. 
 Server process listens for a connect request at the specified port, and spawns a new ```clienthandler``` thread to handle communication with the connected client.
 Each client process, on initialisation spawns 2 threads: ```serverresponsehandler``` and ```clientinputhandler```. 
 - ```serverresponsehandler``` implements an FSM based on certain ```packet``` flags. Used for chat authentication at present.

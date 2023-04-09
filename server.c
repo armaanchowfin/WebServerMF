@@ -22,6 +22,15 @@ all the string processing (EXIT/LIST), username etc are stored and sent to serve
 - UPLOAD, DOWNLOAD. filenames in "file.txt".
 */
 
+
+/*------CURRENT TIME-------
+time_t rawtime;
+struct tm * timeinfo;
+time ( &rawtime );
+timeinfo = localtime ( &rawtime );
+char time_string[40] = "";
+sprintf(time_string, "%s\n", asctime (timeinfo));
+*/
 #define _GNU_SOURCE
 #include "server.h"
 
@@ -132,6 +141,8 @@ void *s_clienthandler(void *_thisconn){
     while(1){
         struct packet *recpack = malloc(sizeof(struct packet));
         recpacket(recpack, mysockfd); //populates recpkt fields.
+//possibly add switch for do .
+
         enum MessageType mtype = recpack->mtype; //
         char *args = recpack->msg_args; //Client list.
         printf("mytpe: %d\n", mtype);
