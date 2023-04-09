@@ -16,12 +16,11 @@ This is a first attempt at creating a multithreaded client-server application bu
 ## Functionality:
 The server has various functionalities. Multiple clients can connect to and interact with the server concurrently. 
 Some functions:
-1. ```LIST``` : Returns a list of connected clients to the requesting client. (done)
-2. ```EXIT``` : Safely disconnects the requesting client from the server. (done)
-3. ```CHAT``` : Initiates a chat mode between requesting client and chat request client(s). A preliminary handshake is performed, inspired by the telnet protocol to confirm client availability. 
-Server maintains a log of all messages sent and received. 
-4. ```UP```   : Uploads a file (any size/ type) to the server. (TODO)
-5. ```DOWN``` : Downloads a file (any size/type) from the server. (TODO)
+1. ```LIST``` : (done) Returns a list of connected clients to the requesting client. (done)
+2. ```EXIT``` : (done) Safely disconnects the requesting client from the server.
+3. ```CHAT client1 client5 client3...``` : (in progress) Initiates a chat mode between requesting client and chat request client(s). A preliminary handshake is performed, inspired by the FTP protocol to confirm client availability. The goal is to implement multiple chat servers given a pool of clients connected to the server. Server maintains a log of all messages sent and received.
+4. ```UP filename```   : (in progress) Uploads a file (any size/ type) to the server. Currently designing the protocol for .jpg files.
+5. ```DOWN filename``` : (TO DO) Downloads a file (any size/type) from the server. Currently designing the protocol for .jpg files.
 
 ## Architecture Decisions
 Server and all clients run _on the same machine_ as independent shell processes. As a result, there are no network-layer effects. Data is routed to and from local kernel buffers, instead of reaching the NIC.
@@ -58,10 +57,4 @@ Each client process, on initialisation spawns 2 threads: ```serverresponsehandle
 - Program is not entirely thread-safe yet. Scalability is a concern and will likely lead to the discovery of concurrency bugs.
 - Error checking not yet implemented for most functions.
 
-
-
-
-## To be done:
-- Formally defining and implementing the Layer-5 protocol : In progress 
-- Performance tests: No work done yet.
 
