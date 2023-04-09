@@ -2,7 +2,7 @@
 
 This is a first attempt at creating a multithreaded client-server application built on TCP, using C. The SocketsAPI is used for networking and PThreads to implement multithreading. A custom layer 5 protocol has also been designed to perform the various erver functionalities.
 
-<for Mythili Ma'am> : A major update will be pushed this weekend to fix the chat and download functions. [7 Apr 2023]
+A major update will be pushed this weekend to fix the chat and download functionss. [7 Apr 2023]
 
 ## Prerequisites
 1. Ensure you are using Linux (I use Ubuntu 20.04 running on a Virtual Machine)
